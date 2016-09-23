@@ -7,12 +7,12 @@ class Nav extends Component {
       showMenu: false
     }
   }
-  
+
   render() {
     return (
       <nav className="nav">
         <span className="nav-toggle"
-          onClick={() => this.setState({showMenu: !this.state.showMenu})}
+          onClick={() => this.setState({ showMenu: !this.state.showMenu })}
         >
           <span></span>
           <span></span>

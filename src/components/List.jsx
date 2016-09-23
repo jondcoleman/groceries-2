@@ -10,7 +10,7 @@ function booleanSort(a, b) {
 export default observer(props => (
   <div className="box">
     <h1 className="title">{props.list.name}</h1>
-    <AddItem list={props.list}/>
+    <AddItem list={props.list} />
     {props.list.items.sort(booleanSort).map((item, i) => <Item item={item} key={i} />)}
   </div>
 ))
