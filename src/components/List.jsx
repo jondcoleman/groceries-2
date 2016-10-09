@@ -1,6 +1,7 @@
 import React from 'react'
 import Item from './Item'
 import AddItem from './AddItem'
+import { Table, Tr } from 'reactable'
 import { observer } from 'mobx-react'
 
 function booleanSort(a, b) {
@@ -21,12 +22,24 @@ function iterateCategories(items) {
   return jsx
 }
 
+function createRows(items) {
+  return items.map(item => (
+    <Tr data={item} className={item.complete ? 'item-complete' : null} />
+  ))
+}
+
 function List(props) {
   return (
     <div className="box">
       <h1 className="title">{props.list.name}</h1>
       <AddItem list={props.list} />
-      {iterateCategories(props.list.items)}
+      <Table
+        sortable
+        className="table"
+      >
+        {createRows(props.list.items)}
+      </Table>
+      {/* iterateCategories(props.list.items) */}
       {/* {props.list.items.sort(booleanSort).map((item, i) => <Item item={item} key={i} />)} */}
     </div>
   )
