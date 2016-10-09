@@ -1,6 +1,15 @@
+.app {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
 .item-name {
   padding-left: 10px;
-  font-size: 1.2em;
+  font-size: 1.5em;
+}
+
+.category-button {
+  width: 70px;
 }
 
 form {

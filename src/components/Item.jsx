@@ -1,18 +1,21 @@
 import React from 'react'
-import { observer } from 'mobx-react'
 
-export default observer(({ item }) =>
-  <div>
-    <input
-      type="checkbox"
-      onChange={() => { item.complete = !item.complete }}
-      checked={item.complete}
-    />
-    <span
-      className="item-name"
-      style={item.complete ? { textDecoration: 'line-through' } : null}
-    >
-      {item ? item.name : null}
-    </span>
-  </div>
-)
+function Item({ item }) {
+  return (
+    <div onClick={() => { item.complete = !item.complete }}>
+      <input
+        type="checkbox"
+        checked={item.complete}
+      />
+      <span
+        className="item-name"
+        style={item.complete ? { textDecoration: 'line-through' } : null}
+        readOnly
+      >
+        {item ? item.name : null}
+      </span>
+    </div>
+  )
+}
+
+export default Item

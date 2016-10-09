@@ -12,7 +12,7 @@ function resetFormState() {
   formState.category = ''
 }
 
-@observer
+@observer(['categoryStore'])
 class AddItem extends Component {
   constructor() {
     super()
@@ -23,6 +23,11 @@ class AddItem extends Component {
     e.preventDefault()
     this.props.list.items.push(Object.assign(toJS(formState), { complete: false }))
     resetFormState()
+  }
+
+  renderCategoryOptions() {
+    return this.props.categoryStore.categories.map(category =>
+      <option value={category.name} key={category.id} >{category.name}</option>)
   }
 
   render() {
@@ -44,8 +49,7 @@ class AddItem extends Component {
                 onChange={(e) => { formState.category = e.target.value }}
               >
                 <option value=""></option>
-                <option value="Dairy">Dairy</option>
-                <option value="Meat">Meat</option>
+                {this.renderCategoryOptions()}
               </select>
             </span>
           </p>

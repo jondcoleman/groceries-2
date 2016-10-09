@@ -1,64 +1,62 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import '../node_modules/bulma/css/bulma.css'
 import './css/style.css'
 import firebase from './utils/firebase'
 import authenticate from './utils/authenticate'
 import database from './utils/database'
-import List from './components/List'
+import { observer, Provider } from 'mobx-react'
+
 import Nav from './components/Nav'
-import { observer } from 'mobx-react'
+import Router from './components/Router'
+import DevTools from 'mobx-react-devtools'
 
-// firebase.auth().getRedirectResult().then(function(result) {
-//   if (result.credential) {
-//     // This gives you a Google Access Token. You can use it to access the Google API.
-//     var token = result.credential.accessToken;
-//     console.log(token)
-//     // ...
-//   }
-//   // The signed-in user info.
-//   var user = result.user;
-//   console.log('user', user)
-// }).catch(function(error) {
-//   // Handle Errors here.
-//   var errorCode = error.code;
-//   var errorMessage = error.message;
-//   console.log(error)
-//   // The email of the user's account used.
-//   var email = error.email;
-//   // The firebase.auth.AuthCredential type that was used.
-//   var credential = error.credential;
-//   // ...
-// });
+firebase.auth().getRedirectResult().then((result) => {
+  if (result.credential) {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const token = result.credential.accessToken
+    console.log(token)
+    // ...
+  }
+  // The signed-in user info.
+  const user = result.user
+  if (!user) authenticate()
+  // console.log('user', user)
+  const newList = database.ref('lists').push()
+  newList.set({ name: 'Groceries', items: [] })
+  newList.child('items').push().set({ name: 'chobani' })
+})
+.catch((error) => {
+  // Handle Errors here.
+  // const errorCode = error.code
+  // const errorMessage = error.message
+  console.log(error)
+  // The email of the user's account used.
+  // const email = error.email
+  // The firebase.auth.AuthCredential type that was used.
+  // const credential = error.credential
+  // ...
+})
 
-const State = observer((listStore) =>
-  <div>
-    <pre>{JSON.stringify(listStore, null, 2)}</pre>
-  </div>
-)
+
 
 @observer
 class App extends Component {
-  // constructor() {
-  //   super()
-  //   this.state = {
-  //     lists: []
-  //   }
-  // }
-  // componentDidMount() {
-  //   database.ref('lists').on('value', snapshot => this.setState({lists:snapshot.val()}))
-  // }
   render() {
     return (
-      <div>
-        <Nav />
-        <div className="App columns">
-          <div className="is-half column is-offset-one-quarter">
-            <button onClick={authenticate}>Log In</button>
-            {this.props.listStore.lists.map((list, i) => <List list={list} key={i}/>)}
-            <State listStore={this.props.listStore} />
+      <Provider
+        userStore={this.props.userStore}
+        categoryStore={this.props.categoryStore}
+        listStore={this.props.listStore}
+        uiStore={this.props.uiStore}
+      >
+        <div>
+          <DevTools />
+          <Nav />
+          <div className="app">
+            <Router />
           </div>
         </div>
-      </div>
+      </Provider>
     )
   }
 }
